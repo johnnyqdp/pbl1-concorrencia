@@ -53,8 +53,8 @@
         private function registrarNoTopico (string $nomeTopico, $valor) {
             try{
                 $json = file_get_contents('topicos.json');
-                $jsonObjeto = json_decode($json);
-                $jsonObjeto->$nomeTopico = $valor;
+                $jsonObjeto = json_decode($json, true);
+                $jsonObjeto[$nomeTopico] = $valor;
                 file_put_contents('topicos.json',
                     json_encode($jsonObjeto)
                 );
@@ -69,22 +69,23 @@
         private function enviarAosInscritos(string $nomeTopico, $valor){
             $inscritos = array();
             $json = file_get_contents('inscritos.json');
-            $jsonObjeto = json_decode($json);
-            $inscritosDoTopico = $jsonObjeto->$nomeTopico;
+            $jsonObjeto = json_decode($json, true);
+            if (!empty($jsonObjeto[$nomeTopico])){
+                $inscritosDoTopico = $jsonObjeto[$nomeTopico];
 
-            foreach ($inscritosDoTopico as $i){
-                $curl = curl_init($i['ip']);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($curl, CURLOPT_POST, true);
+                foreach ($inscritosDoTopico as $i){
+                    $curl = curl_init($i['ip']);
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($curl, CURLOPT_POST, true);
 
-                curl_setopt($curl, CURLOPT_POSTFIELDS, array(
-                    $nomeTopico => $valor,
-                ));
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, array(
+                        $nomeTopico => $valor,
+                    ));
 
-                $resultado = curl_exec($curl);
-                curl_close($curl);
+                    $resultado = curl_exec($curl);
+                    curl_close($curl);
+                }
             }
-
             echo json_encode(
                 array(
                     'success' => true
