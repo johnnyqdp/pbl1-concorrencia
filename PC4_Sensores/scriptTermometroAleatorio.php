@@ -6,7 +6,7 @@
         curl_setopt($curl, CURLOPT_POSTFIELDS, array(
             'termometro' => $valorTemperaturaRegistrada,
         ));
-	error_log("\n\nTemperatura enviada ao broker: ".$valorTemperaturaRegistrada."\n resposta:");
+	    error_log("\n\nTemperatura enviada ao broker: ".$valorTemperaturaRegistrada."\n resposta:");
         curl_exec($curl);
         sleep(5);
     }

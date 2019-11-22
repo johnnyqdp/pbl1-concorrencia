@@ -1,6 +1,10 @@
 {
-    "inscritosArCondicionado": 
+    "ar_condicionado": 
     [
         {"ip": "172.16.103.14:2001"}
+    ],
+    "umidificador":
+    [
+        {"ip":"172.16.103.14:2002"}
     ]
 }

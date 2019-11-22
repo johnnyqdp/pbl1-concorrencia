@@ -10,6 +10,15 @@
             	error_log("Recebido um GET no topico: ar_condicionado");
                 $this->get('ar_condicionado');
             }
+            else if (isset($_GET['termohigrometro'])){
+            	error_log("Recebido um GET no topico: termohigrometro");
+                $this->get('termohigrometro');
+            }
+            else if (isset($_GET['umidificador'])){
+            	error_log("Recebido um GET no topico: umidificador");
+                $this->get('umidificador');
+            }
+
             else if (isset($_POST['ar_condicionado'])){
             	error_log("Recebido um POST de valor: ".$_POST['ar_condicionado']." no topico: ar_condicionado");
                 $this->registrarNoTopico('ar_condicionado', $_POST['ar_condicionado']);
@@ -17,6 +26,14 @@
             else if (isset($_POST['termometro'])) {
             	error_log("Recebido um POST de valor: ".$_POST['termometro']." no topico: termometro");
                 $this->registrarNoTopico('termometro', $_POST['termometro']);
+            }
+            else if (isset($_POST['umidificador'])) {
+            	error_log("Recebido um POST de valor: ".$_POST['umidificador']." no topico: umidificador");
+                $this->registrarNoTopico('umidificador', $_POST['umidificador']);
+            }
+            else if (isset($_POST['termohigrometro'])) {
+            	error_log("Recebido um POST de valor: ".$_POST['termohigrometro']." no topico: termohigrometro");
+                $this->registrarNoTopico('termohigrometro', $_POST['termohigrometro']);
             }
             else{
                 $this->retornarMensagemErro();
