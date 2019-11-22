@@ -3,7 +3,8 @@
 
         public static function post(){
             $value = $_POST['ar_condicionado'];
-            error_log("Ar-condicionado esta em: ".$value);
+            $mensagem = $value == "true" ? "ligado" : "desligado";
+            error_log("O ar-condicionado foi ".$mensagem);
         }
     }
 
