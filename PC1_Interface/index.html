@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS do Bootstrap  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>yourHouse</title>
+</head>
+
+<style>
+    .content {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        padding: 20px;
+    }
+
+    hr {
+        border: 0;
+        clear:both;
+        display:block;
+        width: 100%;               
+        background-color:#d9d9d9;
+        height: 1px;
+    }
+
+    .box {
+        background-color: white;
+        border-radius: 20px;
+        height: 461px;
+        width: 330px;
+        box-shadow: 2px 2px 15px black;
+    }
+
+    #logo {
+        width: 300px;
+        height: 171px;
+        margin-bottom: 5px;
+        margin-top: 20px;
+    }
+
+    .center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column
+    }
+
+    body {
+        background-color: lightblue;
+    }
+
+    @media only screen and (orientation : landscape) {
+        body {
+            background: url('imagens/background.jpg');
+            background-size: 100%;
+        }
+    }
+</style>
+
+<script>
+    function clickTemperatura() {
+        let html = "O termômetro está medindo:" +
+            "<br><br>" +
+            "<div class='center'>" +
+            "<div id='mensagem'><div class='spinner-border text-primary' role='status'></div></div>" +
+            "</div><br>";
+        bootbox.dialog({
+            title: "Informações de Temperatura",
+            message: html,
+            closeButton: false,
+            centerVertical: true,
+        });
+
+        jQuery.get(
+            'http://172.16.103.6:2000?termometro',
+            function (data) {
+                document.getElementById("mensagem").innerHTML = '<h1>' + data.termometro + 'º C</h1>';
+                window.setTimeout(function () {
+                    bootbox.hideAll();
+                }, 2000);
+            },
+            'json'
+        )
+
+    }
+
+    function setAr(value) {
+        document.getElementById("botaoAr").innerHTML = '<div class="spinner-border text-primary" role="status"></div>';
+        jQuery.post(
+            'http://172.16.103.6:2000',
+            {
+                ar_condicionado: value
+            },
+            function (data) {
+                if (data.success) {
+                    if (value) {
+                        document.getElementById("botaoAr").innerHTML = '<button type="button" class="btn btn-danger" onclick="setAr(false)">Desligar ar-condicionado</button>';
+                    } else {
+                        document.getElementById("botaoAr").innerHTML = '<button type="button" class="btn btn-success" onclick="setAr(true)">Ligar ar-condicionado</button>';
+                    }
+                } else {
+                    document.getElementById("botaoAr").innerHTML = 'Não foi possivel se comunicar com o ar-condicionado.';
+                }
+            },
+            'json'
+        );
+    }
+
+    function clickUmidade() {
+        let html = "O termohigrômetro está medindo:" +
+            "<br><br>" +
+            "<div class='center'>" +
+            "<div id='mensagem'><div class='spinner-border text-primary' role='status'></div></div>" +
+            "</div><br>";
+        bootbox.dialog({
+            title: "Informações de Umidade",
+            message: html,
+            closeButton: false,
+            centerVertical: true,
+        });
+
+        jQuery.get(
+            'http://172.16.103.6:2000?termohigrometro',
+            function (data) {
+                document.getElementById("mensagem").innerHTML = '<h1>' + data.termohigrometro + '%</h1>';
+                window.setTimeout(function () {
+                    bootbox.hideAll();
+                }, 2000);
+            },
+            'json'
+        )
+
+    }
+
+    function setUmidificador(value) {
+        document.getElementById("botaoUmidificador").innerHTML = '<div class="spinner-border text-primary" role="status"></div>';
+        jQuery.post(
+            'http://172.16.103.6:2000',
+            {
+                umidificador: value
+            },
+            function (data) {
+                if (data.success) {
+                    if (value) {
+                        document.getElementById("botaoUmidificador").innerHTML = '<button type="button" class="btn btn-danger" onclick="setUmidificador(false)">Desligar Umidificador</button>';
+                    } else {
+                        document.getElementById("botaoUmidificador").innerHTML = '<button type="button" class="btn btn-success" onclick="setUmidificador(true)">Ligar Umidificador</button>';
+                    }
+                } else {
+                    document.getElementById("botaoUmidificador").innerHTML = 'Não foi possivel se comunicar com o umidificador.';
+                }
+            },
+            'json'
+        );
+    }
+
+</script>
+
+<body>
+
+    <div class="content">
+        <div class="box">  
+            <div class="center">
+                <img src="imagens/logo.png" id="logo" />
+                <hr/>
+            </div>
+            <div class="center">
+                <div style="margin-bottom:15px"><button type="button" class="btn btn-primary"
+                        onclick="clickTemperatura()">Visualizar Temperatura</button></div>
+                <div id="botaoAr">
+                    <div class='spinner-border text-primary' role='status'></div>
+                </div>
+                <hr/>
+                <div style="margin-bottom:15px"><button type="button" class="btn btn-primary"
+                        onclick="clickUmidade()">Visualizar Umidade</button></div>
+                <div id="botaoUmidificador">
+                    <div class='spinner-border text-primary' role='status'></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- Javascript: jQuery, Popper.js, Bootstrap JS, bootbox JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="bibliotecasJavascript/bootbox.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            jQuery.get(
+                'http://172.16.103.6:2000?arcondicionado',
+                function (data) {
+                    if (data.ar_condicionado == "true") {
+                        document.getElementById("botaoAr").innerHTML = '<button type="button" class="btn btn-danger" onclick="setAr(false)">Desligar Ar-condicionado</button>';
+                    } else {
+                        document.getElementById("botaoAr").innerHTML = '<button type="button" class="btn btn-success" onclick="setAr(true)">Ligar Ar-condicionado</button>';
+                    }
+                },
+                'json'
+            ).fail(function () {
+                document.getElementById("botaoAr").innerHTML = 'Não foi possivel se comunicar com o ar-condicionado.';
+            })
+
+            jQuery.get(
+                'http://172.16.103.6:2000?umidificador',
+                function (data) {
+                    if (data.umidificador == "true") {
+                        document.getElementById("botaoUmidificador").innerHTML = '<button type="button" class="btn btn-danger" onclick="setUmidificador(false)">Desligar Umidificador</button>';
+                    } else if (data.umidificador == "false"){
+                        document.getElementById("botaoUmidificador").innerHTML = '<button type="button" class="btn btn-success" onclick="setUmidificador(true)">Ligar Umidificador</button>';
+                    }
+                },
+                'json'
+            ).fail(function () {
+                document.getElementById("botaoAr").innerHTML = 'Não foi possivel se comunicar com o umidificador.';
+            })
+        })
+    </script>
+</body>
+
+</html>
