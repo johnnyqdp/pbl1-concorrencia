@@ -1,17 +1,18 @@
-<!doctype html>
+v<!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- CSS do Bootstrap  -->
+    <!-- Importação do código CSS do Bootstrap  -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>yourHouse</title>
 </head>
 
+<!-- Código CSS: -->
 <style>
     .content {
         margin: 0;
@@ -57,7 +58,7 @@
     body {
         background-color: lightblue;
     }
-
+    /* Definindo uma imagem de fundo apenas caso a tela seja widescreen, se for celular em portrait, não vai abrir a imagem no fundo */
     @media only screen and (orientation : landscape) {
         body {
             background: url('imagens/background.jpg');
@@ -67,6 +68,11 @@
 </style>
 
 <script>
+    /**
+     * Função executada ao clicar no botão de temperatura. Abre um bootbox (modal) e faz uma requisição 
+     * GET ao broker. Assim que o broker retornar a temperatura, a função adiciona esse valor dentro do bootbox aberto,
+     * e fecha ele depois de 2000 milissegundos.
+     */
     function clickTemperatura() {
         let html = "O termômetro está medindo:" +
             "<br><br>" +
@@ -93,6 +99,12 @@
 
     }
 
+    /**
+     * Função executada ao clicar no botão de ar-condicionado. O valor recebido é true ao clicar em ligar,
+     * false ao clicar em desligar.
+     * Essa função altera o botão de ar atual (Ex. Se estava "desligar", muda pra "ligar") e faz um POST
+     * no broker, informando que é para inserir o valor da variavel value no topico ar_condicionado
+     */
     function setAr(value) {
         document.getElementById("botaoAr").innerHTML = '<div class="spinner-border text-primary" role="status"></div>';
         jQuery.post(
@@ -115,6 +127,11 @@
         );
     }
 
+    /**
+     * Função executada ao clicar no botão de umidade. Abre um bootbox (modal) e faz uma requisição 
+     * GET ao broker. Assim que o broker retornar a umidade, a função adiciona esse valor dentro do bootbox aberto,
+     * e fecha ele depois de 2000 milissegundos.
+     */
     function clickUmidade() {
         let html = "O termohigrômetro está medindo:" +
             "<br><br>" +
@@ -141,6 +158,12 @@
 
     }
 
+    /**
+     * Função executada ao clicar no botão de umidificador. O valor recebido é true ao clicar em ligar,
+     * false ao clicar em desligar.
+     * Essa função altera o botão de umidificador atual (Ex. Se estava "desligar", muda pra "ligar") e faz um POST
+     * no broker, informando que é para inserir o valor da variavel value no topico umidificador
+     */
     function setUmidificador(value) {
         document.getElementById("botaoUmidificador").innerHTML = '<div class="spinner-border text-primary" role="status"></div>';
         jQuery.post(
@@ -192,7 +215,10 @@
 
 
 
-    <!-- Javascript: jQuery, Popper.js, Bootstrap JS, bootbox JS -->
+    <!-- Importação de algumas bibliotecas Javascript: jQuery, Popper.js, Bootstrap JS, bootbox JS -->
+    <!-- O jQuery foi a biblioteca utilizada para mandar as requisições ao servidor usando javascript,
+    O bootstrap é uma biblioteca pra facilitar a criação do modal de temperatura e umidade, que é apenas
+    uma questão de estética. Pro bootbox funcionar foi necessário importar o bootstrap e o popper também -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -201,6 +227,10 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script src="bibliotecasJavascript/bootbox.min.js"></script>
+
+    <!-- Abaixo está o script que é executado assim que a página é aberta, basicamente ele pergunta ao broker qual é o estado
+    atual do umidificador e do ar-condicionado, e dependendo desse estado, criar o botão correspondente.
+    Por exemplo: se o ar condicionado estiver desligado, então o botão a ser criado é "Ligar ar-condicionado" -->
     <script>
         $(document).ready(function () {
             jQuery.get(
